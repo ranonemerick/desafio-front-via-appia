@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-stone-100 p-8">
+    <div class="max-w-6xl mx-auto">
+
+        <div class="flex justify-between items-end mb-8 border-b-2 border-emerald-900 pb-4">
+            <h1 class="text-4xl font-serif text-emerald-900">Acervo de Livros</h1>
+            <button
+                class="bg-amber-900 text-stone-100 px-6 py-2 font-bold uppercase tracking-widest hover:bg-emerald-900 transition-all rounded-sm">
+                Novo Livro
+            </button>
+        </div>
+
+        <div class="bg-white shadow-lg border border-emerald-900/10 rounded-sm overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-emerald-900 text-stone-100">
+                    <tr>
+                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Título</th>
+                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Gênero</th>
+                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Ano</th>
+                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Autor</th>
+                        <th class="p-4 font-bold uppercase text-xs tracking-wider text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-200">
+                    <tr *ngFor="let book of books" class="hover:bg-stone-50 transition-colors">
+                        <td class="p-4 text-emerald-900 font-semibold">{{ book.title }}</td>
+                        <td class="p-4 text-stone-600">{{ book.gender }}</td>
+                        <td class="p-4 text-stone-600">{{ book.year }}</td>
+                        <td class="p-4 text-stone-600">{{ book.author }}</td>
+                        <td class="p-4 text-right">
+                            <button
+                                class="text-amber-900 hover:text-emerald-900 font-bold underline text-sm">Editar</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="books.length === 0">
+                        <td colspan="5" class="p-10 text-center text-stone-400 italic">
+                            Nenhum livro encontrado no acervo.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="flex justify-center items-center gap-4 p-6 bg-stone-50 border-t border-emerald-900/10">
+                <button [disabled]="currentPage === 0" (click)="loadBooks(currentPage - 1)"
+                    class="px-4 py-2 bg-emerald-900 text-stone-100 disabled:opacity-50 hover:bg-emerald-800 transition-all rounded-sm">
+                    Anterior
+                </button>
+
+                <span class="text-emerald-900 font-bold">
+                    Página {{ currentPage + 1 }} de {{ totalPages }}
+                </span>
+
+                <button [disabled]="currentPage + 1 >= totalPages" (click)="loadBooks(currentPage + 1)"
+                    class="px-4 py-2 bg-emerald-900 text-stone-100 disabled:opacity-50 hover:bg-emerald-800 transition-all rounded-sm">
+                    Próximo
+                </button>
+            </div>
+        </div>
+    </div>

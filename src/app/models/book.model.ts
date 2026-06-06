@@ -5,7 +5,7 @@ export interface Book {
   title: string;
   gender: string;
   year: number;
-  authorId?: string; // Usaremos para salvar
+  authorId?: string;
   author?: Author; 
   active: boolean;
 }
