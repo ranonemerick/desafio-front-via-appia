@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Book } from '../../models/book.model';
-import { BookService } from '../../services/book.service';
+import { BookService } from '../../services/book/book.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

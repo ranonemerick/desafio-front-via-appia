@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Book } from '../models/book.model';
-import { environment } from '../../environments/environment';
+import { Book } from '../../models/book.model';
+import { environment } from '../../../environments/environment';
 import { Title } from '@angular/platform-browser';
 
 @Injectable({
