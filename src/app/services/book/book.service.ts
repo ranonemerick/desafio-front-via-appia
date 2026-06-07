@@ -30,7 +30,11 @@ export class BookService {
   }
 
   getBooksByActive(page: number = 0, size: number = 10) : Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/book/active?page=${page}&size${size}`);
+    return this.http.get<any>(`${this.API_URL}/book/active?page=${page}&size=${size}`)
+  }
+
+  updateBook(id: string, book: any) : Observable<any> {
+    return this.http.put(`${this.API_URL}/book/${id}`, book)
   }
 
 }
