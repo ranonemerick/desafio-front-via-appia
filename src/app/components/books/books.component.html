@@ -44,9 +44,13 @@
                         <td class="p-4 text-stone-600">{{ book.gender }}</td>
                         <td class="p-4 text-stone-600">{{ book.year }}</td>
                         <td class="p-4 text-stone-600">{{ book.author }}</td>
-                        <td class="p-4 text-right">
-                            <button (click)="updateBook(book)",
-                            class="text-amber-900 hover:text-emerald-900 font-bold underline text-sm">Editar
+                        <td class="p-4 text-right flex justify-end gap-4">
+                            <button (click)="updateBook(book)" ,
+                                class="text-amber-900 hover:text-emerald-900 font-bold underline text-sm">Editar
+                            </button>
+                            <button (click)="deleteBook(book.id)"
+                                class="text-red-700 hover:text-red-900 font-bold underline text-sm">
+                                Excluir
                             </button>
                         </td>
                     </tr>

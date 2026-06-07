@@ -50,4 +50,8 @@ export class BookService {
     return this.http.put(`${this.API_URL}/book/${id}`, book)
   }
 
+  deleteBook(id: string) : Observable<any> {
+    return this.http.delete(`${this.API_URL}/book/${id}`);
+  }
+
 }

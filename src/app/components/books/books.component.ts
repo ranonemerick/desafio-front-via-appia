@@ -93,6 +93,23 @@ export class BooksComponent implements OnInit {
     this.isFormVisible = true;
   }
 
+  deleteBook(id: string | undefined) {
+    if (!id) {
+      console.warn("Tentativa de excluir livro sem ID definido.");
+      return;
+    }
+    
+    if (confirm('Tem certeza que deseja excluir esse livro? ')) {
+      this.bookService.deleteBook(id).subscribe({
+        next: () => {
+          alert("Livro excluído com sucesso!");
+          this.loadBooks(this.currentPage);
+        },
+        error: (err) => console.error("Erro ao deletar: ", err)
+      });
+    }
+  }
+
   loadBooks(page: number) {
     this.bookService.getBooksByActive(page, 10).subscribe(response => {
       this.books = response.content;
