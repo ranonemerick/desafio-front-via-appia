@@ -5,12 +5,14 @@ import { BookService } from '../../services/book/book.service';
 import { FormsModule } from '@angular/forms';
 import { AuthorService } from '../../services/author/author.service';
 import { NotificationService } from '../../services/notification/notification.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-books',
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.scss',

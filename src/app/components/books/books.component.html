@@ -1,7 +1,17 @@
 <div class="min-h-screen bg-stone-100 p-8">
     <div class="max-w-6xl mx-auto">
         <div class="flex justify-between items-end mb-8 border-b-2 border-emerald-900 pb-4">
-            <h1 class="text-4xl font-serif text-emerald-900">Acervo de Livros</h1>
+            <div class="flex items-center gap-4">
+                <button routerLink="/dashboard" 
+                        class="p-2 text-emerald-900 hover:bg-emerald-900/10 rounded transition-colors" 
+                        title="Voltar ao Painel">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                </button>
+                <h1 class="text-4xl font-serif text-emerald-900">Acervo de Livros</h1>
+            </div>
             <button (click)="toggleForm()"
                 class="bg-amber-900 text-stone-100 px-6 py-2 font-bold uppercase tracking-widest hover:bg-emerald-900 transition-all rounded-sm">
                 Novo Livro
@@ -15,10 +25,12 @@
                     <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ totalPages * 10 }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded bg-emerald-900/10 flex items-center justify-center text-emerald-900">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
-                        <path d="M6 6h10"/>
-                        <path d="M6 10h10"/>
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                        <path d="M6 6h10" />
+                        <path d="M6 10h10" />
                     </svg>
                 </div>
             </div>
@@ -29,11 +41,13 @@
                     <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ authors.length }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded bg-emerald-900/10 flex items-center justify-center text-emerald-900">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                     </svg>
                 </div>
             </div>
@@ -47,32 +61,38 @@
                     </h3>
                 </div>
                 <div class="w-12 h-12 rounded bg-emerald-900/10 flex items-center justify-center text-emerald-900">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                        <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
-                        <path d="M3 12A9 3 0 0 0 21 12"/>
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" />
+                        <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+                        <path d="M3 12A9 3 0 0 0 21 12" />
                     </svg>
                 </div>
             </div>
         </div>
 
         <div class="bg-stone-50 p-6 mb-8 border border-emerald-900/10 rounded-sm shadow-sm">
-            
+
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <div class="relative w-full sm:max-w-md border border-stone-200 rounded shadow-sm bg-white focus-within:ring-2 focus-within:ring-emerald-900 transition-all">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </span>
-                    <input type="text" placeholder="Buscar no acervo..." 
-                           class="w-full pl-10 p-2.5 bg-transparent outline-none text-stone-600 placeholder-stone-400">
+                    <input type="text" placeholder="Buscar no acervo..."
+                        class="w-full pl-10 p-2.5 bg-transparent outline-none text-stone-600 placeholder-stone-400">
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
                     <button class="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-stone-200 text-stone-600 font-bold rounded shadow-sm hover:bg-stone-100 transition-all text-sm flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+                            </path>
                         </svg>
                         Filtros
                     </button>
@@ -125,13 +145,10 @@
     </div>
 </div>
 
-<div *ngIf="isFormVisible" 
-     class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    
+<div *ngIf="isFormVisible" class="fixed inset-0 z-50 flex items-center justify-center p-4">
     <div (click)="resetForm()" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity"></div>
 
     <div class="relative bg-stone-50 w-full max-w-md rounded-lg shadow-2xl border border-emerald-900/20 overflow-hidden animate-in zoom-in-95 duration-200">
-        
         <div class="bg-emerald-900 p-4 flex justify-between items-center">
             <h2 class="text-stone-100 font-serif text-xl">
                 {{ editingBook ? 'Editar Livro' : 'Novo Registro' }}
@@ -142,38 +159,38 @@
         <div class="p-6 flex flex-col gap-5">
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Título do Livro</label>
-                <input [(ngModel)]="newBook.title" placeholder="Ex: O Senhor dos Anéis" 
-                       class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
+                <input [(ngModel)]="newBook.title" placeholder="Ex: O Senhor dos Anéis"
+                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
             </div>
 
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Gênero</label>
-                <input [(ngModel)]="newBook.gender" placeholder="Ex: Fantasia" 
-                       class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
+                <input [(ngModel)]="newBook.gender" placeholder="Ex: Fantasia"
+                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
             </div>
 
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Ano de Lançamento</label>
-                <input [(ngModel)]="newBook.year" type="number" placeholder="Ex: 1954" 
-                       class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
+                <input [(ngModel)]="newBook.year" type="number" placeholder="Ex: 1954"
+                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
             </div>
 
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Autor Responsável</label>
-                <select [(ngModel)]="newBook.authorId" 
-                        class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
+                <select [(ngModel)]="newBook.authorId"
+                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
                     <option [ngValue]="null" disabled>Selecione um autor do acervo</option>
                     <option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</option>
                 </select>
             </div>
 
             <div class="flex gap-3 mt-4">
-                <button (click)="resetForm()" 
-                        class="flex-1 px-4 py-3 border border-stone-300 text-stone-600 font-bold rounded hover:bg-stone-100 transition-all">
+                <button (click)="resetForm()"
+                    class="flex-1 px-4 py-3 border border-stone-300 text-stone-600 font-bold rounded hover:bg-stone-100 transition-all">
                     Descartar
                 </button>
-                <button (click)="saveBook()" 
-                        class="flex-1 px-4 py-3 bg-emerald-900 text-stone-100 font-bold rounded hover:bg-emerald-800 shadow-md transition-all">
+                <button (click)="saveBook()"
+                    class="flex-1 px-4 py-3 bg-emerald-900 text-stone-100 font-bold rounded hover:bg-emerald-800 shadow-md transition-all">
                     {{ editingBook ? 'Atualizar' : 'Salvar' }}
                 </button>
             </div>
