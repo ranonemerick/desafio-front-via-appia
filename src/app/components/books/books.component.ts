@@ -4,6 +4,7 @@ import { Book } from '../../models/book.model';
 import { BookService } from '../../services/book/book.service';
 import { FormsModule } from '@angular/forms';
 import { AuthorService } from '../../services/author/author.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-books',
@@ -17,6 +18,7 @@ import { AuthorService } from '../../services/author/author.service';
 export class BooksComponent implements OnInit {
   private bookService = inject(BookService);
   private authorService = inject(AuthorService);
+  private notificationService = inject(NotificationService);
 
   books: Book[] = [];
 
@@ -59,12 +61,15 @@ export class BooksComponent implements OnInit {
 
     this.bookService.createBook(bookToSave).subscribe({
       next: () => {
-        alert("Livro criado com sucesso!");
+        this.notificationService.show("Livro criado com sucesso! ", "success");
         this.loadBooks(0); //Recarrega a lista
         this.newBook = { title: '', gender: '', year: null, author: selectedAuthor } //Limpa o formulário
         this.isFormVisible = false;
       },
-      error: (err) => console.error("Erro ao salvar: ", err)
+      error: (err) => {
+        console.error("Erro ao salvar: ", err);
+        this.notificationService.show("Erro ao salvar livro! ", "error");
+      }
     });
   }
 
@@ -75,7 +80,7 @@ export class BooksComponent implements OnInit {
       author: selectedAuthor
     };
     this.bookService.updateBook(this.editingBook.id, bookToUpdate).subscribe(() => {
-      alert("Livro atualizado");
+      this.notificationService.show("Livro atualizado com sucesso! ", "success");
       this.loadBooks(0);
       this.resetForm();
     })
@@ -95,17 +100,20 @@ export class BooksComponent implements OnInit {
 
   deleteBook(id: string | undefined) {
     if (!id) {
-      console.warn("Tentativa de excluir livro sem ID definido.");
+      this.notificationService.show("Tentativa de excluir livro sem ID definido.", "warning");
       return;
     }
-    
+
     if (confirm('Tem certeza que deseja excluir esse livro? ')) {
       this.bookService.deleteBook(id).subscribe({
         next: () => {
-          alert("Livro excluído com sucesso!");
+          this.notificationService.show("Livro excluído com sucesso! ", "success");
           this.loadBooks(this.currentPage);
         },
-        error: (err) => console.error("Erro ao deletar: ", err)
+        error: (err) => {
+          console.error("Erro ao deletar: ", err);
+          this.notificationService.show("Não foi possível deletar o livro! ", 'error');
+        }
       });
     }
   }
