@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { Author } from '../../models/author.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,10 @@ import { Observable } from 'rxjs';
 export class AuthorService {
   private http = inject(HttpClient);
   private readonly API_URL = environment.apiUrl;
+
+  createAuthor(author: Author): Observable<any>{
+    return this.http.post(`${this.API_URL}/author`, author);
+  }
 
   getAuthors(page: number, size: number): Observable<any> {
     const params = new HttpParams()
@@ -37,6 +42,12 @@ export class AuthorService {
     return this.http.get(`${this.API_URL}/author/params`, { params });
   }
 
+  updateAuthor(id: string, author: any) : Observable<any> {
+    return this.http.put(`${this.API_URL}/author/${id}`, author);
+  }
+
+  deleteAuthor(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
 }
-
-
