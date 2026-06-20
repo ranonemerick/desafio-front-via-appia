@@ -5,13 +5,15 @@ import { RouterLink } from '@angular/router';
 import { AuthorService } from '../../services/author/author.service';
 import { Author } from '../../models/author.model';
 import { NotificationService } from '../../services/notification/notification.service';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-author',
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink
+    RouterLink,
+    ConfirmModalComponent
   ],
   templateUrl: './author.component.html',
   styleUrl: './author.component.scss',
@@ -24,6 +26,9 @@ export class AuthorComponent {
 
   currentPage = 0;
   totalPages = 0;
+
+  isConfirmModalVisible = false;
+  authorIdToDelete: string | null = null;
 
   isFormVisible: boolean = false;
   
@@ -71,22 +76,20 @@ updateExistingAuthor() {
     this.isFormVisible = true;
   }
 
-deleteAuthor(id: string | undefined) {
-  if (!id) {
-    return; 
-  }
+deleteAuthor() {
+  if (!this.authorIdToDelete) return;
 
-  if (confirm('Tem certeza que deseja excluir este autor?')) {
-    this.authorService.deleteAuthor(id).subscribe({
-      next: () => {
-        this.notificationService.show("Autor excluído com sucesso!", "success");
-        this.loadAuthors(0);
-      },
-      error: (err) => {
-        this.notificationService.show("Erro ao excluir autor.", "error");
-      }
-    });
-  }
+  this.authorService.deleteAuthor(this.authorIdToDelete).subscribe({
+    next: () => {
+      this.notificationService.show("Autor excluído com sucesso!", "success");
+      this.loadAuthors(0);
+      this.closeConfirmModal();
+    },
+    error: (err) => {
+      this.notificationService.show("Erro ao excluir autor!", "error");
+      this.closeConfirmModal();
+    }
+  })
 }
   
   loadAuthors(page : number) {
@@ -101,6 +104,17 @@ deleteAuthor(id: string | undefined) {
     this.newAuthor = {name: '', nationality: '', books: []}
     this.editingAuthor = null;
     this.isFormVisible = false;
+  }
+
+  openDeleteConfirmation(id : string |  undefined) {
+    if(!id) return;
+    this.authorIdToDelete = id;
+    this.isConfirmModalVisible = true;
+  }
+
+  closeConfirmModal() {
+    this.isConfirmModalVisible = false;
+    this.authorIdToDelete = null;
   }
 
 }

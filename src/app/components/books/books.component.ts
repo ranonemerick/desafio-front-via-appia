@@ -6,13 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { AuthorService } from '../../services/author/author.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { RouterLink } from '@angular/router';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-books',
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink
+    RouterLink,
+    ConfirmModalComponent
   ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.scss',
@@ -23,6 +25,9 @@ export class BooksComponent implements OnInit {
   private notificationService = inject(NotificationService);
 
   books: Book[] = [];
+
+  isConfirmModalVisible = false;
+  bookIdToDelete: string | null = null;
 
   currentPage = 0;
   totalPages = 0;
@@ -100,24 +105,20 @@ export class BooksComponent implements OnInit {
     this.isFormVisible = true;
   }
 
-  deleteBook(id: string | undefined) {
-    if (!id) {
-      this.notificationService.show("Tentativa de excluir livro sem ID definido.", "warning");
-      return;
-    }
-
-    if (confirm('Tem certeza que deseja excluir esse livro? ')) {
-      this.bookService.deleteBook(id).subscribe({
+  deleteBook() {
+    if (!this.bookIdToDelete) return;
+      this.bookService.deleteBook(this.bookIdToDelete).subscribe({
         next: () => {
           this.notificationService.show("Livro excluído com sucesso! ", "success");
           this.loadBooks(this.currentPage);
+          this.closeConfirmModal();
         },
         error: (err) => {
-          console.error("Erro ao deletar: ", err);
           this.notificationService.show("Não foi possível deletar o livro! ", 'error');
+          this.closeConfirmModal();
         }
       });
-    }
+    
   }
 
   loadBooks(page: number) {
@@ -138,6 +139,17 @@ export class BooksComponent implements OnInit {
     this.newBook = { title: '', gender: '', year: null, authorId: null };
     this.editingBook = null;
     this.isFormVisible = false;
+  }
+
+  openDeleteConfirmation(id: string | undefined) {
+    if (!id) return;
+    this.bookIdToDelete = id;
+    this.isConfirmModalVisible = true;
+  }
+
+  closeConfirmModal() {
+    this.isConfirmModalVisible = false;
+    this.bookIdToDelete = null;
   }
 
 }
