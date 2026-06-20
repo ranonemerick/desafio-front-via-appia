@@ -47,7 +47,7 @@ export class AuthorService {
   }
 
   deleteAuthor(id: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/${id}`);
+    return this.http.delete(`${this.API_URL}/author/${id}`);
   }
 
 }

@@ -40,7 +40,8 @@ export class AuthorComponent {
       next: () => {
         this.notificationService.show("Autor criado com sucesso! ", "success");
         this.loadAuthors(0);
-        this.newAuthor= {name: '', nationality: '', books: []}
+        this.newAuthor = {name: '', nationality: '', books: []}
+        this.isFormVisible = false;
       },
       error: (err) => {
         this.notificationService.show("Erro ao cadastrar autor! ", "error")
@@ -69,6 +70,24 @@ updateExistingAuthor() {
     };
     this.isFormVisible = true;
   }
+
+deleteAuthor(id: string | undefined) {
+  if (!id) {
+    return; 
+  }
+
+  if (confirm('Tem certeza que deseja excluir este autor?')) {
+    this.authorService.deleteAuthor(id).subscribe({
+      next: () => {
+        this.notificationService.show("Autor excluído com sucesso!", "success");
+        this.loadAuthors(0);
+      },
+      error: (err) => {
+        this.notificationService.show("Erro ao excluir autor.", "error");
+      }
+    });
+  }
+}
   
   loadAuthors(page : number) {
     this.authorService.getAuthorsByActive(page, 10).subscribe( response => {
