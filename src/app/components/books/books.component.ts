@@ -7,6 +7,7 @@ import { AuthorService } from '../../services/author/author.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { RouterLink } from '@angular/router';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal';
+import { debounce, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-books',
@@ -26,8 +27,12 @@ export class BooksComponent implements OnInit {
 
   books: Book[] = [];
 
+  searchTerm: string = '';
+  currentSort: string = 'title,asc';
+
   isConfirmModalVisible = false;
   bookIdToDelete: string | null = null;
+  private searchSubject = new Subject<string>();
 
   currentPage = 0;
   totalPages = 0;
@@ -43,6 +48,13 @@ export class BooksComponent implements OnInit {
   ngOnInit() {
     this.loadBooks(0);
     this.loadAuthors(0, 10);
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(searchText => {
+      this.searchTerm = searchText;
+      this.loadBooks(0);
+    });
   }
 
   toggleForm() {
@@ -121,14 +133,22 @@ export class BooksComponent implements OnInit {
     
   }
 
-  loadBooks(page: number) {
-    this.bookService.getBooksByActive(page, 10).subscribe(response => {
-      this.books = response.content;
-      this.currentPage = response.number;
-      this.totalPages = response.totalPages;
-    });
+loadBooks(page: number) {
+    if (this.searchTerm && this.searchTerm.trim() !== '') {
+      this.bookService.getBooksByParams(this.searchTerm, '', null, '', page, 10, this.currentSort).subscribe((response: any) => {
+        this.books = response.content;
+        this.currentPage = response.number;
+        this.totalPages = response.totalPages;
+      });
+    } else {
+      this.bookService.getBooksByActive(page, 10, this.currentSort).subscribe((response: any) => {
+        this.books = response.content;
+        this.currentPage = response.number;
+        this.totalPages = response.totalPages;
+      });
+    }
   }
-
+  
   loadAuthors(page: number, size: number) {
     this.authorService.getAuthors(page, size).subscribe(response => {
       this.authors = response.content;
@@ -150,6 +170,19 @@ export class BooksComponent implements OnInit {
   closeConfirmModal() {
     this.isConfirmModalVisible = false;
     this.bookIdToDelete = null;
+  }
+
+  onSearchType(text: string) {
+    this.searchSubject.next(text);
+  }
+
+  toggleSort(column: string) { 
+    if(this.currentSort === `${column},asc`) {
+      this.currentSort = `${column},desc`
+    } else {
+      this.currentSort = `${column},asc`
+    }
+    this.loadBooks(0);
   }
 
 }

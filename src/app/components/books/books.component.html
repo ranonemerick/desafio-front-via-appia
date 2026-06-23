@@ -24,7 +24,7 @@
                 class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-stone-500 uppercase tracking-widest">Total no Acervo</p>
-                    <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ totalPages * 10 }}</h3>
+                    <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ totalPages === 0 ? books.length : totalPages * 10 }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded bg-emerald-900/10 flex items-center justify-center text-emerald-900">
                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -79,8 +79,7 @@
         <div class="bg-stone-50 p-6 mb-8 border border-emerald-900/10 rounded-sm shadow-sm">
 
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                <div
-                    class="relative w-full sm:max-w-md border border-stone-200 rounded shadow-sm bg-white focus-within:ring-2 focus-within:ring-emerald-900 transition-all">
+                <div class="relative w-full sm:max-w-md border border-stone-200 rounded shadow-sm bg-white focus-within:ring-2 focus-within:ring-emerald-900 transition-all">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -88,30 +87,35 @@
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </span>
-                    <input type="text" placeholder="Buscar no acervo..."
+                    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchType($event)" 
+                        placeholder="Buscar livro por título..."
                         class="w-full pl-10 p-2.5 bg-transparent outline-none text-stone-600 placeholder-stone-400">
-                </div>
-
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button
-                        class="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-stone-200 text-stone-600 font-bold rounded shadow-sm hover:bg-stone-100 transition-all text-sm flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
-                            </path>
-                        </svg>
-                        Filtros
-                    </button>
                 </div>
             </div>
 
             <table class="w-full text-left border-collapse">
                 <thead class="bg-emerald-900 text-stone-100">
                     <tr>
-                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Título</th>
-                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Gênero</th>
-                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Ano</th>
-                        <th class="p-4 font-bold uppercase text-xs tracking-wider">Autor</th>
+                        <th (click)="toggleSort('title')" class="p-4 font-bold uppercase text-xs tracking-wider cursor-pointer hover:bg-emerald-800 transition-colors select-none">
+                            Título
+                            <span *ngIf="currentSort === 'title,asc'">↑</span>
+                            <span *ngIf="currentSort === 'title,desc'">↓</span>
+                        </th>
+                        <th (click)="toggleSort('gender')" class="p-4 font-bold uppercase text-xs tracking-wider cursor-pointer hover:bg-emerald-800 transition-colors select-none">
+                            Gênero
+                            <span *ngIf="currentSort === 'gender,asc'">↑</span>
+                            <span *ngIf="currentSort === 'gender,desc'">↓</span>
+                        </th>
+                        <th (click)="toggleSort('year')" class="p-4 font-bold uppercase text-xs tracking-wider cursor-pointer hover:bg-emerald-800 transition-colors select-none">
+                            Ano
+                            <span *ngIf="currentSort === 'year,asc'">↑</span>
+                            <span *ngIf="currentSort === 'year,desc'">↓</span>
+                        </th>
+                        <th (click)="toggleSort('author.name')" class="p-4 font-bold uppercase text-xs tracking-wider cursor-pointer hover:bg-emerald-800 transition-colors select-none">
+                            Autor
+                            <span *ngIf="currentSort === 'author.name,asc'">↑</span>
+                            <span *ngIf="currentSort === 'author.name,desc'">↓</span>
+                        </th>
                         <th class="p-4 font-bold uppercase text-xs tracking-wider text-right">Ações</th>
                     </tr>
                 </thead>
@@ -143,7 +147,7 @@
                     Anterior
                 </button>
                 <span class="text-emerald-900 font-bold">
-                    Página {{ currentPage + 1 }} de {{ totalPages }}
+                    Página {{ currentPage + 1 }} de {{ totalPages === 0 ? 1 : totalPages }}
                 </span>
                 <button [disabled]="currentPage + 1 >= totalPages" (click)="loadBooks(currentPage + 1)"
                     class="px-4 py-2 bg-emerald-900 text-stone-100 disabled:opacity-50 hover:bg-emerald-800 transition-all rounded-sm">
@@ -188,7 +192,7 @@
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Autor Responsável</label>
                 <select [(ngModel)]="newBook.authorId"
-                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all">
+                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all text-stone-700">
                     <option [ngValue]="null" disabled>Selecione um autor do acervo</option>
                     <option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</option>
                 </select>

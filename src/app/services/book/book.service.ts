@@ -26,22 +26,25 @@ export class BookService {
     return this.http.get<Book[]>(`${this.API_URL}/book/${id}`)
   }
 
-  getBooksByParam(title: string, gender: string, year: number, authorName: string, page: number = 0, size: number = 10): Observable<any> {
-    const params = new HttpParams()
-      .set('title', title.toString())
-      .set('gender', gender.toString())
-      .set('year', year.toString())
-      .set('authorName', authorName.toString())
+getBooksByParams(title: string, gender: string, year: number | null, authorName: string, page: number = 0, size: number = 10, sort: string = 'title,asc'): Observable<any> {
+    let params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', sort);
 
+    if (title && title.trim() !== '') params = params.set('title', title.trim());
+    if (gender && gender.trim() !== '') params = params.set('gender', gender.trim());
+    if (year) params = params.set('year', year.toString());
+    if (authorName && authorName.trim() !== '') params = params.set('authorName', authorName.trim());
+  
     return this.http.get<any>(`${this.API_URL}/book/params`, { params });
   }
 
-  getBooksByActive(page: number = 0, size: number = 10): Observable<any> {
+  getBooksByActive(page: number = 0, size: number = 10, sort: string = 'title,asc'): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', sort)
 
     return this.http.get<any>(`${this.API_URL}/book/active`, { params });
   }
