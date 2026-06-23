@@ -6,6 +6,8 @@ import { AuthorService } from '../../services/author/author.service';
 import { Author } from '../../models/author.model';
 import { NotificationService } from '../../services/notification/notification.service';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-author',
@@ -24,6 +26,10 @@ export class AuthorComponent {
 
   authors: Author[] = [];
 
+  searchTerm: string = '';
+  currentSort: string = 'name,asc';
+  private searchSubject = new Subject<string>();
+
   currentPage = 0;
   totalPages = 0;
 
@@ -36,8 +42,19 @@ export class AuthorComponent {
 
   newAuthor: any = {name: '', nationality: '', books: []}
 
-  ngOnInit() {
+ngOnInit() {
     this.loadAuthors(0);
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(searchText => {
+      this.searchTerm = searchText;
+      this.applyFilter(); 
+    });
+  }
+
+  onSearchType(text: string) {
+    this.searchSubject.next(text);
   }
 
   createNewAuthor() {
@@ -92,12 +109,20 @@ deleteAuthor() {
   })
 }
   
-  loadAuthors(page : number) {
-    this.authorService.getAuthorsByActive(page, 10).subscribe( response => {
-      this.authors = response.content;
-      this.currentPage = response.number;
-      this.totalPages = response.totalPages;
-    })
+loadAuthors(page : number) {
+    if (this.searchTerm && this.searchTerm.trim() !== '') {
+      this.authorService.getAuthorsByParams(this.searchTerm, '', page, 10, this.currentSort).subscribe((response : any) => {
+        this.authors = response.content;
+        this.currentPage = response.number;
+        this.totalPages = response.totalPages;
+      });
+    } else {
+      this.authorService.getAuthorsByActive(page, 10, this.currentSort).subscribe((response : any) => {
+        this.authors = response.content;
+        this.currentPage = response.number;
+        this.totalPages = response.totalPages;
+      });
+    }
   }
 
   resetForm() {
@@ -117,5 +142,17 @@ deleteAuthor() {
     this.authorIdToDelete = null;
   }
 
+  applyFilter() {
+    this.loadAuthors(0);
+  }
+
+  toggleSort(column: string) {
+    if (this.currentSort === `${column},asc`) {
+      this.currentSort = `${column},desc`;
+    } else {
+      this.currentSort = `${column},asc`;
+    }
+    this.loadAuthors(0);
+  }
+
 }
- 

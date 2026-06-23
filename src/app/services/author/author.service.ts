@@ -22,10 +22,11 @@ export class AuthorService {
     return this.http.get(`${this.API_URL}/author`, { params });
   }
 
-  getAuthorsByActive(page: number, size: number): Observable<any> {
+  getAuthorsByActive(page: number, size: number, sort : string = 'name,asc'): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', sort);
     return this.http.get(`${this.API_URL}/author/active`, { params });
   }
 
@@ -33,12 +34,15 @@ export class AuthorService {
     return this.http.get(`${this.API_URL}/author/${id}`);
   }
 
-  getAuthorsByParams(name: string, nationality: string, page: number, size: number) {
-    const params = new HttpParams()
-      .set('name', name.toString())
-      .set('nationality', nationality.toString())
+  getAuthorsByParams(name: string, nationality: string, page: number, size: number, sort: string = 'name,asc') {
+    let params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', sort);
+      
+      if (name && name.trim() !== '') params = params.set('name', name.trim());
+      if (nationality && nationality.trim() !== '') params = params.set('nationality', nationality.trim());
+    
     return this.http.get(`${this.API_URL}/author/params`, { params });
   }
 
