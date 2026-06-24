@@ -57,12 +57,17 @@ export class BooksComponent implements OnInit {
   isConfirmModalVisible = false;
   bookIdToDelete: string | null = null;
 
+  isAuthorDropdownOpen: boolean = false;
+  authorSearchTerm: string = '';
+  selectedAuthorName: string = '';
+  private authorSearchSubject = new Subject<string>();
+
   // ==========================================
   // 3. CICLO DE VIDA (LIFECYCLE HOOKS)
   // ==========================================
-  ngOnInit() {
+ngOnInit() {
     this.loadBooks(0);
-    this.loadAuthors(0, 10);
+    this.loadAuthors(0, 50);
     
     this.searchSubject.pipe(
       debounceTime(500),
@@ -70,6 +75,13 @@ export class BooksComponent implements OnInit {
     ).subscribe(searchText => {
       this.searchTerm = searchText;
       this.loadBooks(0);
+    });
+
+    this.authorSearchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(searchText => {
+      this.searchAuthors(searchText);
     });
   }
 
@@ -132,15 +144,15 @@ export class BooksComponent implements OnInit {
     });
   }
 
-  updateBook(book: any) {
+updateBook(book: any) {
     this.editingBook = { ...book };
-
     const authorFound = this.authors.find(a => a.name === book.author);
 
     this.newBook = {
       ...book,
       authorId: authorFound ? authorFound.id : null
     };
+    this.selectedAuthorName = book.author; 
     this.isFormVisible = true;
   }
 
@@ -193,9 +205,12 @@ export class BooksComponent implements OnInit {
     this.isFormVisible = !this.isFormVisible;
   }
 
-  resetForm() {
+resetForm() {
     this.newBook = { title: '', gender: '', year: null, authorId: null };
     this.editingBook = null;
+    this.selectedAuthorName = '';
+    this.authorSearchTerm = '';
+    this.isAuthorDropdownOpen = false; 
     this.isFormVisible = false;
   }
 
@@ -209,4 +224,42 @@ export class BooksComponent implements OnInit {
     this.isConfirmModalVisible = false;
     this.bookIdToDelete = null;
   }
+
+
+  toggleAuthorDropdown() {
+    this.isAuthorDropdownOpen = !this.isAuthorDropdownOpen;
+    if (this.isAuthorDropdownOpen) {
+      this.searchAuthors('');
+    }
+  }
+
+  onAuthorSearchType(text: string) {
+    this.authorSearchSubject.next(text);
+  }
+
+  searchAuthors(name: string) {
+    if (name && name.trim() !== '') {
+      this.authorService.getAuthorsByParams(name, '', 0, 50, 'name,asc').subscribe((response: any) => {
+        this.authors = response.content;
+      });
+    } else {
+      this.loadAuthors(0, 50);
+    }
+  }
+
+  selectAuthor(author: any) {
+    this.newBook.authorId = author.id;
+    this.selectedAuthorName = author.name;
+    this.isAuthorDropdownOpen = false;
+    this.authorSearchTerm = ''; 
+  }
+
+  clearAuthorSelection(event: Event) {
+    event.stopPropagation();
+    this.newBook.authorId = null;
+    this.selectedAuthorName = '';
+    this.authorSearchTerm = '';
+    this.isAuthorDropdownOpen = false;
+  }
+
 }

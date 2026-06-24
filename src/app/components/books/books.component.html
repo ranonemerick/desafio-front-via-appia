@@ -20,8 +20,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div
-                class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
+            <div class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-stone-500 uppercase tracking-widest">Total no Acervo</p>
                     <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ totalPages === 0 ? books.length : totalPages * 10 }}</h3>
@@ -37,8 +36,7 @@
                 </div>
             </div>
 
-            <div
-                class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
+            <div class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-stone-500 uppercase tracking-widest">Autores Cadastrados</p>
                     <h3 class="text-3xl font-serif text-emerald-900 mt-1">{{ authors.length }}</h3>
@@ -55,8 +53,7 @@
                 </div>
             </div>
 
-            <div
-                class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
+            <div class="bg-stone-50 p-6 rounded-sm border border-emerald-900/10 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-stone-500 uppercase tracking-widest">Status do Sistema</p>
                     <h3 class="text-lg font-bold text-emerald-900 mt-2 flex items-center gap-2">
@@ -87,7 +84,7 @@
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </span>
-                    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchType($event)" 
+                    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchType($event)"
                         placeholder="Buscar livro por título..."
                         class="w-full pl-10 p-2.5 bg-transparent outline-none text-stone-600 placeholder-stone-400">
                 </div>
@@ -128,7 +125,7 @@
                         <td class="p-4 text-right flex justify-end gap-4">
                             <button (click)="updateBook(book)"
                                 class="text-amber-900 hover:text-emerald-900 font-bold underline text-sm transition-colors">Editar
-                                </button>
+                            </button>
                             <button type="button" (click)="openDeleteConfirmation(book.id)"
                                 class="text-red-700 hover:text-red-900 font-bold underline text-sm transition-colors">
                                 Excluir
@@ -161,9 +158,9 @@
 <div *ngIf="isFormVisible" class="fixed inset-0 z-50 flex items-center justify-center p-4">
     <div (click)="resetForm()" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity"></div>
 
-    <div
-        class="relative bg-stone-50 w-full max-w-md rounded-lg shadow-2xl border border-emerald-900/20 overflow-hidden animate-in zoom-in-95 duration-200">
-        <div class="bg-emerald-900 p-4 flex justify-between items-center">
+    <div class="relative bg-stone-50 w-full max-w-md rounded-lg shadow-2xl border border-emerald-900/20 animate-in zoom-in-95 duration-200">
+        
+        <div class="bg-emerald-900 p-4 flex justify-between items-center rounded-t-lg">
             <h2 class="text-stone-100 font-serif text-xl">
                 {{ editingBook ? 'Editar Livro' : 'Novo Registro' }}
             </h2>
@@ -191,11 +188,59 @@
 
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-emerald-900 uppercase tracking-tighter">Autor Responsável</label>
-                <select [(ngModel)]="newBook.authorId"
-                    class="p-3 bg-white border border-stone-300 rounded focus:ring-2 focus:ring-emerald-900 outline-none transition-all text-stone-700">
-                    <option [ngValue]="null" disabled>Selecione um autor do acervo</option>
-                    <option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</option>
-                </select>
+
+                <div class="relative">
+                    
+                    <div (click)="toggleAuthorDropdown()"
+                        class="p-3 bg-white border border-stone-300 rounded outline-none transition-all cursor-pointer flex justify-between items-center hover:border-emerald-900">
+                        <span [class.text-stone-400]="!selectedAuthorName" [class.text-stone-700]="selectedAuthorName" class="truncate">
+                            {{ selectedAuthorName || 'Selecione um autor do acervo' }}
+                        </span>
+
+                        <div class="flex items-center gap-2">
+                            <button *ngIf="selectedAuthorName" (click)="clearAuthorSelection($event)"
+                                class="text-stone-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-stone-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                            <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isAuthorDropdownOpen"
+                        class="absolute top-full mt-1 left-0 w-full bg-white border border-stone-200 rounded-md shadow-2xl z-[70] overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+
+                        <div class="p-3 bg-stone-50 border-b border-stone-200">
+                            <div class="relative">
+                                <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                <input type="text" [(ngModel)]="authorSearchTerm"
+                                    (ngModelChange)="onAuthorSearchType($event)" placeholder="Pesquisar autor..."
+                                    class="w-full pl-9 pr-3 py-2 text-sm border border-stone-300 bg-white rounded outline-none focus:border-emerald-900 focus:ring-1 focus:ring-emerald-900 transition-all text-stone-700"
+                                    (click)="$event.stopPropagation()">
+                            </div>
+                        </div>
+
+                        <ul class="max-h-56 overflow-y-auto">
+                            <li *ngIf="authors.length === 0" class="p-4 text-sm text-stone-500 text-center italic">
+                                Nenhum autor encontrado.
+                            </li>
+
+                            <li *ngFor="let author of authors" (click)="selectAuthor(author)"
+                                class="px-4 py-3 text-sm text-stone-700 hover:bg-emerald-50 hover:text-emerald-900 cursor-pointer border-b border-stone-100 last:border-0 transition-colors flex items-center justify-between">
+                                {{ author.name }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div *ngIf="isAuthorDropdownOpen" (click)="isAuthorDropdownOpen = false" class="fixed inset-0 z-[60]"></div>
             </div>
 
             <div class="flex gap-3 mt-4">
@@ -211,6 +256,7 @@
         </div>
     </div>
 </div>
+
 <app-confirm-modal [isVisible]="isConfirmModalVisible" title="Excluir Livro"
     message="Tem certeza que deseja excluir este livro? Ele será permanentemente removido do acervo."
     (confirmed)="deleteBook()" (cancelled)="closeConfirmModal()">
